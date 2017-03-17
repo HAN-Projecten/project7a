@@ -5,10 +5,21 @@
  */
 package project_7a;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
  *
  * @author Martlan
  */
 public class VoorspellenORF {
+    
+    private ArrayList<String> startCodons;
+    private ArrayList<String> stopCodons;
+    private ArrayList<ORF> ORFs;
+    
+    public void voorspelORF(HashMap nucleotideSequentie) {
+        
+    }
     
 }
