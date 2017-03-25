@@ -32,6 +32,7 @@ public class VoorspellenORF {
         String sequentie;
         int begin = 0;
         int eind;
+        int lengte;
         boolean start = false;
         String codon = null;
         for (Map.Entry<String,String> entry : nucleotideSequenties.entrySet()) {
@@ -40,9 +41,9 @@ public class VoorspellenORF {
             for (int i = 0; i < sequentie.length(); i+=3) {
                 try {
                     codon = sequentie.substring(i, i+3).toUpperCase();
-                    System.out.println(codon);
+//                    System.out.println(codon);
                 } catch (StringIndexOutOfBoundsException e) {
-                    System.out.println("OUT OF BOUNDS");
+//                    System.out.println("OUT OF BOUNDS");
                 }
                 if (!start && startCodons.contains(codon)) {
                     start = true;
@@ -51,12 +52,15 @@ public class VoorspellenORF {
                 else if (start && stopCodons.contains(codon)) {
                     start = false;
                     eind = i+3;
-                    ORF temp = new ORF(begin, eind, readingFrame, sequentie);
+                    String ORFsequentie = sequentie.substring(begin-1, eind).toUpperCase();
+                    lengte = ORFsequentie.length();
+                    ORF temp = new ORF(begin, eind, lengte, readingFrame, ORFsequentie);
                     ORFs.add(temp);
                 }
             }
         }
-        System.out.println(ORFs);
+//        System.out.println(ORFs);
+//        System.out.println(ORFs.get(0).getBegin()+"\n"+ORFs.get(0).getEind()+"\n"+ORFs.get(0).getLengte()+"\n"+ORFs.get(0).getSequentie()+"\n"+ORFs.get(0).getReadingFrame());
     }
 
 }

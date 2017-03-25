@@ -13,12 +13,14 @@ public class ORF {
     
     private int begin;
     private int eind;
+    private int lengte;
     private String readingFrame;
     private String sequentie;
     
-    ORF(int begin, int eind, String readingFrame, String sequentie) {
+    ORF(int begin, int eind, int lengte, String readingFrame, String sequentie) {
         this.begin = begin;
         this.eind = eind;
+        this.lengte = lengte;
         this.readingFrame = readingFrame;
         this.sequentie = sequentie;
     }
@@ -77,6 +79,20 @@ public class ORF {
      */
     public void setSequentie(String sequentie) {
         this.sequentie = sequentie;
+    }
+
+    /**
+     * @return the lengte
+     */
+    public int getLengte() {
+        return lengte;
+    }
+
+    /**
+     * @param lengte the lengte to set
+     */
+    public void setLengte(int lengte) {
+        this.lengte = lengte;
     }
     
 }
