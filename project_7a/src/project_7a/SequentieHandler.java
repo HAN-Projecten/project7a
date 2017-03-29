@@ -6,6 +6,7 @@
 package project_7a;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -14,7 +15,7 @@ import java.util.HashMap;
 public class SequentieHandler {
     
     private HashMap<String, String> readingFrames = new HashMap<String, String>();
-    private String aminozuurSequentie = "";
+    private HashMap<String, String> aminozuurSequenties = new HashMap<String, String>();
     private static final HashMap<String, String> code;
     static {
         code = new HashMap<String, String>();
@@ -26,16 +27,21 @@ public class SequentieHandler {
         code.put("cuc", "L");code.put("ccc", "P");code.put("cac", "H");code.put("cgc", "R");
         code.put("cua", "L");code.put("cca", "P");code.put("caa", "Q");code.put("cga", "R");
         code.put("cug", "L");code.put("ccg", "P");code.put("cag", "Q");code.put("cgg", "R");
-        code.put("auu", "I");code.put("acu", "u");code.put("aau", "N");code.put("agu", "S");
-        code.put("auc", "I");code.put("acc", "u");code.put("aac", "N");code.put("agc", "S");
-        code.put("aua", "I");code.put("aca", "u");code.put("aaa", "K");code.put("aga", "R");
-        code.put("aug", "M");code.put("acg", "u");code.put("aag", "K");code.put("agg", "R");
+        code.put("auu", "I");code.put("acu", "T");code.put("aau", "N");code.put("agu", "S");
+        code.put("auc", "I");code.put("acc", "T");code.put("aac", "N");code.put("agc", "S");
+        code.put("aua", "I");code.put("aca", "T");code.put("aaa", "K");code.put("aga", "R");
+        code.put("aug", "M");code.put("acg", "T");code.put("aag", "K");code.put("agg", "R");
         code.put("guu", "V");code.put("gcu", "A");code.put("gau", "D");code.put("ggu", "G");
         code.put("guc", "V");code.put("gcc", "A");code.put("gac", "D");code.put("ggc", "G");
         code.put("gua", "V");code.put("gca", "A");code.put("gaa", "E");code.put("gga", "G");
         code.put("gug", "V");code.put("gcg", "A");code.put("gag", "E");code.put("ggg", "G");
     }
     
+    /**
+     *
+     * @param nucleotideSequentie
+     * @return
+     */
     public HashMap maakReadingFrames(String nucleotideSequentie) {
         String forwardSequentie = nucleotideSequentie.toUpperCase();
         String reverseSequentie = maakReverseSequentie(forwardSequentie);
@@ -48,6 +54,11 @@ public class SequentieHandler {
         return readingFrames;
     }
     
+    /**
+     *
+     * @param forwardSequentie
+     * @return
+     */
     public String maakReverseSequentie(String forwardSequentie) {
         String reverseSequentie = "";
         for (int i=0; i<forwardSequentie.length(); i++){
@@ -71,17 +82,30 @@ public class SequentieHandler {
         return reverseSequentie;
     }
     
-    public String maakAminozuurSequentie(String nucleotideSequentie) {
-        for (int i=0; i<nucleotideSequentie.length(); i+=3) {
-            try {
-                String codon = nucleotideSequentie.substring(i, i+3);
-                aminozuurSequentie += code.get(codon);
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("OUT OF BOUNDS");
+    /**
+     *
+     * @param nucleotideSequenties
+     * @return
+     */
+    public HashMap<String,String> maakAminozuurSequentie(HashMap<String,String> nucleotideSequenties) {
+        String readingFrame;
+        String sequentie;
+        for (Map.Entry<String,String> entry : nucleotideSequenties.entrySet()) {
+            String aminozuurSequentie = "";
+            readingFrame = entry.getKey();
+            sequentie = entry.getValue().toLowerCase();
+            for (int i=0; i<sequentie.length(); i+=3) {
+                try {
+                    String codon = sequentie.substring(i, i+3);
+                    aminozuurSequentie += code.get(codon);
+                } catch (IndexOutOfBoundsException e) {
+                    break;
+                }
             }
+            aminozuurSequenties.put(readingFrame, aminozuurSequentie);
         }
         
-        return aminozuurSequentie;
+        return aminozuurSequenties;
     }
     
 }
