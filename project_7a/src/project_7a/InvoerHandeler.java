@@ -5,47 +5,55 @@
  */
 package project_7a;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.lang.String;
 import javax.swing.JOptionPane;
+
+
 
 /**
  *
  * @author roel
  */
+
 public class InvoerHandeler {
-    
-    private String nucleotideSequentie;
-    private BufferedReader inFile;
-    static StringBuilder seq = new StringBuilder();
-    static String sequentie;
-    
-    
-InvoerHandeler(String NSequentie){
+static StringBuilder seq = new StringBuilder();
+static String sequentie;
+static String header;
+static boolean dna;
 
-        nucleotideSequentie = NSequentie;
+   public static void bestandLezen(BufferedReader bestand) throws FileNotFoundException, IOException{    
+        String line = "";
+        boolean start = false ;
+
+        while ( ( line = bestand.readLine()) != null){
+            if (line.startsWith(">") && !start ){
+                header = line;
+                start = true;
+                System.out.println(header);
+            }
+            else if (line.startsWith(">") && start) {
+                break;
+            }
+            else {
+                seq.append(line);
+            }
+        }
+        sequentie = seq.toString(); 
+        System.out.println(sequentie);
+    }
+                
+   
+   public boolean DNAorNOT(String doorvoer){
+       dna = false;
+       final String ISDNA = "^[AUCG]+$";  
+
+       dna = doorvoer.matches(ISDNA);
+       return dna;
+    }
 }
 
-    /**
-     * @return the nucleotideSequentie
-     */
-    public String getNucleotideSequentie() {
-        return nucleotideSequentie;
-    }
 
-    /**
-     * @param nucleotideSequentie the nucleotideSequentie to set
-     */
-    public void setNucleotideSequentie(String nucleotideSequentie) {
-        this.nucleotideSequentie = nucleotideSequentie;
-    }
-    
-    public void Bestandlezen(bestand){
-    String kaas;
     
     
-        
-    
-    }
-}
+
