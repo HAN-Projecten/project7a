@@ -9,7 +9,7 @@ import java.io.*;
 
 /**
  *
- * @author roel
+ * @author Roel Koper
  */
 
 public class InvoerHandeler {
