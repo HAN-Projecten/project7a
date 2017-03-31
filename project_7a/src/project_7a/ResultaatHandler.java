@@ -22,6 +22,10 @@ public class ResultaatHandler {
     
     static int sequentieID;
     
+    /**
+     *
+     * @return
+     */
     public static Connection getConnectie() {
         try{
             String driver = "com.mysql.jdbc.Driver";
@@ -37,6 +41,10 @@ public class ResultaatHandler {
         return null;
     }
     
+    /**
+     *
+     * @param nucleotideSequentie
+     */
     public static void opslaanSeq(String nucleotideSequentie) {
         try{
             Connection conn = getConnectie();
@@ -50,6 +58,10 @@ public class ResultaatHandler {
         }catch(Exception e){System.out.println(e);}
     }
     
+    /**
+     *
+     * @param ORFs
+     */
     public static void opslaanORF(ArrayList<ORF> ORFs) {
         try{
             Connection conn = getConnectie();
@@ -69,6 +81,10 @@ public class ResultaatHandler {
         }catch(Exception e){System.out.println(e);}      
     }
     
+    /**
+     *
+     * @return
+     */
     public static int getORF_id() {
         try {
             int ORFid = 0;
@@ -85,6 +101,10 @@ public class ResultaatHandler {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public static int getSequentie_id() {
         try {
             Connection conn = getConnectie();

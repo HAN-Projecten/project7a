@@ -25,11 +25,18 @@ public class GUI extends javax.swing.JFrame {
     private HashMap<String, String> aminozuurSequenties = new HashMap<String, String>();
     private ArrayList<ORF> ORFs = new ArrayList<ORF>();
     
+    /**
+     *
+     */
     public GUI() {
         initComponents();
         
     }
     
+    /**
+     *
+     * @throws FileNotFoundException
+     */
     public void openBestand() throws FileNotFoundException{
         File geselecteerdBestand;
         JFileChooser fileChooser;
@@ -172,19 +179,17 @@ public class GUI extends javax.swing.JFrame {
 
     private void openKnopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openKnopActionPerformed
         try {
-            invoer.bestandLezen(inFile); 
-            jTextArea1.setText(invoer.sequentie.toUpperCase());
-            doorvoer = jTextArea1.getText();
-     
+            doorvoer = new InvoerHandeler().bestandLezen(inFile).toUpperCase();
+            jTextArea1.setText(doorvoer);
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_openKnopActionPerformed
 
     private void analiseerKnopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analiseerKnopActionPerformed
-        boolean dna = invoer.DNAorNOT(doorvoer);
+        doorvoer = jTextArea1.getText().toUpperCase();
+        boolean dna = new InvoerHandeler().DNAorNOT(doorvoer);
         if (!dna){
-            System.out.println("geen dna");
             JOptionPane.showMessageDialog(null, "De sequentie die u wil analyzeren bevat corruptie");
         }
         else {

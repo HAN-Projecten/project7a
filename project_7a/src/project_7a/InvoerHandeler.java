@@ -14,13 +14,20 @@ import java.io.*;
 
 public class InvoerHandeler {
     
-    static StringBuilder seq = new StringBuilder();
-    static String sequentie;
-    static String header;
-    static boolean dna;
+    StringBuilder seq = new StringBuilder();
+    String sequentie;
+    String header;
+    boolean dna;
 
-   public static void bestandLezen(BufferedReader bestand) throws FileNotFoundException, IOException{    
-        String line = "";
+    /**
+     *
+     * @param bestand
+     * @return 
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public String bestandLezen(BufferedReader bestand) throws FileNotFoundException, IOException{    
+        String line;
         boolean start = false ;
 
         while ( ( line = bestand.readLine()) != null){
@@ -36,10 +43,15 @@ public class InvoerHandeler {
             }
         }
         sequentie = seq.toString();
+        return sequentie;
     }
                 
-   
-   public boolean DNAorNOT(String doorvoer){
+    /**
+     *
+     * @param doorvoer
+     * @return
+     */
+    public boolean DNAorNOT(String doorvoer){
        dna = false;
        final String ISDNA = "^[AUCG]+$";  
 
