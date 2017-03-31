@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Marliek
+ * @author Marliek Bonnecroij
  */
 public class ResultaatHandler {
     
@@ -49,8 +49,8 @@ public class ResultaatHandler {
             Connection conn = getConnectie();
             String querySeq ="insert into sequentie(sequentie_id , invoer_sequentie)" + "values (?,?)";
             PreparedStatement preparedQuery = conn.prepareStatement(querySeq);
-            preparedQuery.setInt(0,getSequentie_id());
-            preparedQuery.setString(1, nucleotideSequentie);
+            preparedQuery.setInt(1,getSequentie_id());
+            preparedQuery.setString(2, nucleotideSequentie);
             preparedQuery.execute();
             
             conn.close();
@@ -63,13 +63,13 @@ public class ResultaatHandler {
             for (ORF ORF : ORFs) {
                 String queryORF = "insert into orf (ORF_id, ORF_sequentie, ORF_lengte, reading_frame, begin, eind, Sequentie_sequentie_id)" + "values (?,?,?,?,?,?,?)";
                 PreparedStatement preparedORF = conn.prepareStatement(queryORF);
-                preparedORF.setInt(0, getORF_id());
-                preparedORF.setString(1, ORF.getSequentie()); 
-                preparedORF.setInt(2, ORF.getLengte());
-                preparedORF.setString(3, ORF.getReadingFrame());
-                preparedORF.setInt(4, ORF.getBegin());
-                preparedORF.setInt(5, ORF.getEind());
-                preparedORF.setInt(6, sequentieID);
+                preparedORF.setInt(1, getORF_id());
+                preparedORF.setString(2, ORF.getSequentie()); 
+                preparedORF.setInt(3, ORF.getLengte());
+                preparedORF.setString(4, ORF.getReadingFrame());
+                preparedORF.setInt(5, ORF.getBegin());
+                preparedORF.setInt(6, ORF.getEind());
+                preparedORF.setInt(7, sequentieID);
                 preparedORF.execute();
             }
             conn.close();
@@ -90,7 +90,6 @@ public class ResultaatHandler {
             Logger.getLogger(ResultaatHandler.class.getName()).log(Level.SEVERE, null, ex);
             return 1;
         }
-        //return 0;
     }
     
     public static int getSequentie_id() {
@@ -99,14 +98,13 @@ public class ResultaatHandler {
             PreparedStatement ps = conn.prepareStatement("SELECT MAX(sequentie_ID) FROM Sequentie");
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                sequentieID = rs.getInt(1);
+                sequentieID = rs.getInt(1)+1;
             }
-            return sequentieID+1;
+            return sequentieID;
         } catch (SQLException ex) {
             System.out.println("");
             return 1;
         }
-        //return 0;
     }
     
 }
