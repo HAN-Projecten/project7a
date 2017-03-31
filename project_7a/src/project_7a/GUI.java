@@ -5,35 +5,32 @@
  */
 package project_7a;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
+import java.io.*;
+import java.util.*;
+import javax.swing.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author roel
  */
 public class GUI extends javax.swing.JFrame {
-
-    /**
-     * Creates new form GUI
-     */
-    protected JTextField bestand;
+    
     private BufferedReader inFile;
-    static StringBuilder seq = new StringBuilder();
-    static String sequentie;        
+    static FileReader bestand;
+    private String doorvoer;
+    InvoerHandeler invoer = new InvoerHandeler();
+    HashMap<String, String> readingFrames = new HashMap<String, String>();
+    HashMap<String, String> aminozuurSequenties = new HashMap<String, String>();
+    ArrayList<ORF> ORFs = new ArrayList<ORF>();
     
     public GUI() {
         initComponents();
         
     }
     
-    public void OpenBestand(){
+    public void openBestand() throws FileNotFoundException{
         File geselecteerdBestand;
         JFileChooser fileChooser;
         int reply;
@@ -42,29 +39,14 @@ public class GUI extends javax.swing.JFrame {
         reply = fileChooser.showOpenDialog(this);
         if(reply == JFileChooser.APPROVE_OPTION){
             geselecteerdBestand = fileChooser.getSelectedFile();
-            bestand.setText(geselecteerdBestand.getAbsolutePath());
-        }
-    }
-        public void bestandLezen() throws FileNotFoundException, IOException{
-         
-            inFile = new BufferedReader(
-                new FileReader(bestand.getText()));
-                bestand.setText("");
-                String line;
-                while ( ( line = inFile.readLine()) != null){
-                    seq.append(line);    
-                    sequentie = seq.toString();
-                    }
-                }
-        
-        
-        
+            bestandsVeld.setText(geselecteerdBestand.getAbsolutePath());
             
+        }
         
-        
+        bestand = new FileReader(bestandsVeld.getText());
+        inFile = new BufferedReader(bestand);
+    }
     
-    
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -74,48 +56,139 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        bestandsVeld = new javax.swing.JTextField();
+        bladerKnop = new javax.swing.JButton();
+        openKnop = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel2 = new javax.swing.JLabel();
+        analyzeKnop = new javax.swing.JButton();
+        opslaanKnop = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("jButton1");
+        bladerKnop.setText(" Bladeren");
+        bladerKnop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bladerKnopActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("jButton2");
+        openKnop.setText("Openen");
+        openKnop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openKnopActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Bestand:");
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jLabel2.setText("Sequentie:");
+
+        analyzeKnop.setText("Analyze");
+        analyzeKnop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                analyzeKnopActionPerformed(evt);
+            }
+        });
+
+        opslaanKnop.setText("Save to Database");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(38, 38, 38)
-                .addComponent(jButton2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(analyzeKnop))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(bestandsVeld, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bladerKnop)
+                        .addGap(38, 38, 38)
+                        .addComponent(openKnop))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
                 .addGap(50, 50, 50))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(640, 640, 640)
+                .addComponent(opslaanKnop)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bladerKnop)
+                    .addComponent(openKnop)
+                    .addComponent(bestandsVeld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addContainerGap(410, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(86, 86, 86)
+                        .addComponent(jLabel2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(analyzeKnop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(150, 150, 150)
+                .addComponent(opslaanKnop)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void bladerKnopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bladerKnopActionPerformed
+        try {
+            openBestand();
+        } catch (FileNotFoundException ex) {
+           
+        }
+    }//GEN-LAST:event_bladerKnopActionPerformed
+
+    private void openKnopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openKnopActionPerformed
+        try {
+            invoer.bestandLezen(inFile); 
+            jTextArea1.setText(invoer.sequentie.toUpperCase());
+            doorvoer = jTextArea1.getText();
+     
+        } catch (IOException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_openKnopActionPerformed
+
+    private void analyzeKnopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeKnopActionPerformed
+        boolean dna = invoer.DNAorNOT(doorvoer);
+        if (!dna){
+            System.out.println("geen dna");
+            JOptionPane.showMessageDialog(null, "De sequentie die u wil analyzeren bevat corruptie");
+        }
+        else {
+            readingFrames = new SequentieHandler().maakReadingFrames(doorvoer);
+            aminozuurSequenties = new SequentieHandler().maakAminozuurSequentie(readingFrames);
+            ORFs = new VoorspellenORF().voorspelORF(readingFrames);
+            jLabel3.setText("Aantal ORFs: "+ORFs.size());
+        }
+        
+    }//GEN-LAST:event_analyzeKnopActionPerformed
 
     /**
      * @param args the command line arguments
@@ -153,9 +226,15 @@ public class GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton analyzeKnop;
+    private javax.swing.JTextField bestandsVeld;
+    private javax.swing.JButton bladerKnop;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private static javax.swing.JTextArea jTextArea1;
+    private javax.swing.JButton openKnop;
+    private javax.swing.JButton opslaanKnop;
     // End of variables declaration//GEN-END:variables
 }
