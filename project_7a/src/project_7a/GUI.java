@@ -99,6 +99,11 @@ public class GUI extends javax.swing.JFrame {
         });
 
         opslaanKnop.setText("Save to Database");
+        opslaanKnop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                opslaanKnopActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -189,6 +194,15 @@ public class GUI extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_analyzeKnopActionPerformed
+
+    private void opslaanKnopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opslaanKnopActionPerformed
+        if (doorvoer!=null) {
+            ResultaatHandler.opslaanSeq(doorvoer);
+        } else {
+            JOptionPane.showMessageDialog(null, "Je kan geen sequentie opslaan als je geen sequentie hebt ingevoerd\n-_-");
+        }
+        ResultaatHandler.opslaanORF(ORFs);
+    }//GEN-LAST:event_opslaanKnopActionPerformed
 
     /**
      * @param args the command line arguments

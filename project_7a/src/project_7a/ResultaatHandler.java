@@ -22,13 +22,6 @@ public class ResultaatHandler {
     
     static int sequentieID;
     
-    public static void main(String[] args) {
-        opslaanSeq("aucg");
-        ArrayList<ORF> temp = new ArrayList<ORF>();
-        temp.add(new ORF(4,12,9,"1+","AUGCCCUAA"));
-        opslaanORF(temp);
-    }
-    
     public static Connection getConnectie() {
         try{
             String driver = "com.mysql.jdbc.Driver";
