@@ -6,10 +6,6 @@
 package project_7a;
 
 import java.io.*;
-import java.lang.String;
-import javax.swing.JOptionPane;
-
-
 
 /**
  *
@@ -17,10 +13,11 @@ import javax.swing.JOptionPane;
  */
 
 public class InvoerHandeler {
-static StringBuilder seq = new StringBuilder();
-static String sequentie;
-static String header;
-static boolean dna;
+    
+    static StringBuilder seq = new StringBuilder();
+    static String sequentie;
+    static String header;
+    static boolean dna;
 
    public static void bestandLezen(BufferedReader bestand) throws FileNotFoundException, IOException{    
         String line = "";
@@ -30,7 +27,6 @@ static boolean dna;
             if (line.startsWith(">") && !start ){
                 header = line;
                 start = true;
-                System.out.println(header);
             }
             else if (line.startsWith(">") && start) {
                 break;
@@ -39,8 +35,7 @@ static boolean dna;
                 seq.append(line);
             }
         }
-        sequentie = seq.toString(); 
-        System.out.println(sequentie);
+        sequentie = seq.toString();
     }
                 
    

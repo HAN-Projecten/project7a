@@ -8,7 +8,6 @@ package project_7a;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
-import java.lang.String;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,18 +16,14 @@ import java.util.logging.Logger;
  * @author roel
  */
 public class GUI extends javax.swing.JFrame {
-
-    /**
-     * Creates new form GUI
-     */
-
     
     private BufferedReader inFile;
     static FileReader bestand;
     private String doorvoer;
     InvoerHandeler invoer = new InvoerHandeler();
-    
-            
+    HashMap<String, String> readingFrames = new HashMap<String, String>();
+    HashMap<String, String> aminozuurSequenties = new HashMap<String, String>();
+    ArrayList<ORF> ORFs = new ArrayList<ORF>();
     
     public GUI() {
         initComponents();
@@ -51,15 +46,7 @@ public class GUI extends javax.swing.JFrame {
         bestand = new FileReader(bestandsVeld.getText());
         inFile = new BufferedReader(bestand);
     }
-        
-        
-        
-            
-        
-        
     
-    
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -70,28 +57,29 @@ public class GUI extends javax.swing.JFrame {
     private void initComponents() {
 
         bestandsVeld = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        bladerKnop = new javax.swing.JButton();
+        openKnop = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        analyzeKnop = new javax.swing.JButton();
+        opslaanKnop = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText(" Bladeren");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        bladerKnop.setText(" Bladeren");
+        bladerKnop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                bladerKnopActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Openen");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        openKnop.setText("Openen");
+        openKnop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                openKnopActionPerformed(evt);
             }
         });
 
@@ -101,44 +89,43 @@ public class GUI extends javax.swing.JFrame {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        jLabel2.setText("jLabel2");
+        jLabel2.setText("Sequentie:");
 
-        jButton3.setText("Analyze");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        analyzeKnop.setText("Analyze");
+        analyzeKnop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                analyzeKnopActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Save to Database");
+        opslaanKnop.setText("Save to Database");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(bestandsVeld, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1)
-                                .addGap(38, 38, 38)
-                                .addComponent(jButton2))
-                            .addComponent(jScrollPane1))))
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(analyzeKnop))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(bestandsVeld, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bladerKnop)
+                        .addGap(38, 38, 38)
+                        .addComponent(openKnop))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
                 .addGap(50, 50, 50))
             .addGroup(layout.createSequentialGroup()
                 .addGap(640, 640, 640)
-                .addComponent(jButton4)
+                .addComponent(opslaanKnop)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -146,8 +133,8 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
+                    .addComponent(bladerKnop)
+                    .addComponent(openKnop)
                     .addComponent(bestandsVeld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,27 +144,27 @@ public class GUI extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(86, 86, 86)
                         .addComponent(jLabel2)))
-                .addGap(35, 35, 35)
-                .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 150, Short.MAX_VALUE)
-                .addComponent(jButton4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(analyzeKnop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(150, 150, 150)
+                .addComponent(opslaanKnop)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void bladerKnopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bladerKnopActionPerformed
         try {
-            // TODO add your handling code here:
             openBestand();
         } catch (FileNotFoundException ex) {
            
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_bladerKnopActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+    private void openKnopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openKnopActionPerformed
         try {
             invoer.bestandLezen(inFile); 
             jTextArea1.setText(invoer.sequentie.toUpperCase());
@@ -186,18 +173,22 @@ public class GUI extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_openKnopActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+    private void analyzeKnopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeKnopActionPerformed
         boolean dna = invoer.DNAorNOT(doorvoer);
-        System.out.println(dna);
         if (!dna){
             System.out.println("geen dna");
             JOptionPane.showMessageDialog(null, "De sequentie die u wil analyzeren bevat corruptie");
         }
+        else {
+            readingFrames = new SequentieHandler().maakReadingFrames(doorvoer);
+            aminozuurSequenties = new SequentieHandler().maakAminozuurSequentie(readingFrames);
+            ORFs = new VoorspellenORF().voorspelORF(readingFrames);
+            jLabel3.setText("Aantal ORFs: "+ORFs.size());
+        }
         
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_analyzeKnopActionPerformed
 
     /**
      * @param args the command line arguments
@@ -235,14 +226,15 @@ public class GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton analyzeKnop;
     private javax.swing.JTextField bestandsVeld;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton bladerKnop;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private static javax.swing.JTextArea jTextArea1;
+    private javax.swing.JButton openKnop;
+    private javax.swing.JButton opslaanKnop;
     // End of variables declaration//GEN-END:variables
 }
