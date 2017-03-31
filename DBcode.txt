@@ -1,0 +1,124 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+USE `mydb` ;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Sequentie`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Sequentie` (
+  `sequentie_id` INT NOT NULL,
+  `invoer_sequentie` TEXT NULL,
+  PRIMARY KEY (`sequentie_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`ORF`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`ORF` (
+  `ORF_id` INT NOT NULL,
+  `ORF_sequentie` TEXT NULL,
+  `ORF_lengte` INT NULL,
+  `reading_frame` TEXT NULL,
+  `begin` INT NULL,
+  `eind` INT NULL,
+  `Sequentie_sequentie_id` INT NOT NULL,
+  PRIMARY KEY (`ORF_id`, `Sequentie_sequentie_id`),
+  INDEX `fk_ORF_Sequentie1_idx` (`Sequentie_sequentie_id` ASC),
+  CONSTRAINT `fk_ORF_Sequentie1`
+    FOREIGN KEY (`Sequentie_sequentie_id`)
+    REFERENCES `mydb`.`Sequentie` (`sequentie_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+COMMENT = '	';
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Organisme`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Organisme` (
+  `organisme_id` INT NOT NULL,
+  `familienaam` VARCHAR(1000) NULL,
+  `soort` VARCHAR(1000) NULL,
+  `geslacht` VARCHAR(1000) NULL,
+  PRIMARY KEY (`organisme_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Eiwit`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Eiwit` (
+  `Eiwit_id` INT NOT NULL,
+  `accessie_code_eiwit` VARCHAR(1000) NULL,
+  `naam_eiwit` VARCHAR(1000) NULL,
+  `functie_eiwit` VARCHAR(1000) NULL,
+  `subcellular_location` VARCHAR(1000) NULL,
+  PRIMARY KEY (`Eiwit_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`BLAST_resultaten`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`BLAST_resultaten` (
+  `BLAST_resultaten_id` INT NOT NULL,
+  `accessie_code` VARCHAR(1000) NULL,
+  `accessie_descriptie` VARCHAR(1000) NULL,
+  `hit_lengte` INT NULL,
+  `bitscore` FLOAT NULL,
+  `score` FLOAT NULL,
+  `e_value` FLOAT NULL,
+  `query_start` INT NULL,
+  `query_stop` INT NULL,
+  `hit_start` INT NULL,
+  `hit_stop` INT NULL,
+  `identities` INT NULL,
+  `positives` INT NULL,
+  `gaps` INT NULL,
+  `alignment_lengte` INT NULL,
+  `query_sequentie` VARCHAR(1000) NULL,
+  `hit_sequentie` VARCHAR(1000) NULL,
+  `midline` VARCHAR(1000) NULL,
+  `Organisme_organisme_id` INT NOT NULL,
+  `Eiwit_Eiwit_id` INT NOT NULL,
+  `ORF_ORF_id` INT NOT NULL,
+  `ORF_Sequentie_sequentie_id` INT NOT NULL,
+  PRIMARY KEY (`BLAST_resultaten_id`),
+  INDEX `fk_BLAST_resultaten_Organisme1_idx` (`Organisme_organisme_id` ASC),
+  INDEX `fk_BLAST_resultaten_Eiwit1_idx` (`Eiwit_Eiwit_id` ASC),
+  INDEX `fk_BLAST_resultaten_ORF1_idx` (`ORF_ORF_id` ASC, `ORF_Sequentie_sequentie_id` ASC),
+  CONSTRAINT `fk_BLAST_resultaten_Organisme1`
+    FOREIGN KEY (`Organisme_organisme_id`)
+    REFERENCES `mydb`.`Organisme` (`organisme_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_BLAST_resultaten_Eiwit1`
+    FOREIGN KEY (`Eiwit_Eiwit_id`)
+    REFERENCES `mydb`.`Eiwit` (`Eiwit_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_BLAST_resultaten_ORF1`
+    FOREIGN KEY (`ORF_ORF_id` , `ORF_Sequentie_sequentie_id`)
+    REFERENCES `mydb`.`ORF` (`ORF_id` , `Sequentie_sequentie_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
